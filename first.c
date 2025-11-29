@@ -2,10 +2,15 @@
 #include <pthread.h>
 #include <unistd.h>
 
+//projede her philo bir thread olarak çalışır
+//aynı belleği (çatal) kullanmalılar
+
+
 int num = 0;
 pthread_mutex_t ledger_lock;
 void *ledfer(void *data)
 {
+    usleep(10);
     pthread_mutex_lock(&ledger_lock);
     num+=1;
     pthread_mutex_unlock(&ledger_lock);
@@ -16,7 +21,7 @@ int main()
 {
     int i;
     pthread_mutex_init(&ledger_lock,NULL);
-    pthread_t persons[5000];
+    pthread_t persons[5000]; //oluşturulan thread kimliği b uradaki adreste sklanır
     
     for(i=0;i<5000;i++)
     {
