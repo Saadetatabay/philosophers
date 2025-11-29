@@ -26,3 +26,25 @@ void    init_forks(t_data *data)
         i++;
     }
 }
+
+t_philo	*philo_init(t_data *data)
+{
+	t_philo	*philos;
+	int		i;
+
+	i = 0;
+	philos = malloc(sizeof(t_philo)* data->num_philo);
+	if (!philos)
+		return 1;
+	
+	while (i < data->num_philo)
+	{
+		philos[i].id = i + 1;
+		philos[i].eat_count = 0;
+		philos[i].last_time_eat = 0;
+		philos[i].data = data;
+		philos[i].left_fork = &data->forks[i];
+		philos[i].right_fork = &data->forks[(i + 1) % data->num_philo];
+	}
+	return	philos;
+}

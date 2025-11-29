@@ -23,9 +23,12 @@ int check_num(char **args)
 int main(int argc, char *argv[])
 {
     t_data data;
+    t_philo *philos;
     if ((argc == 5 || argc == 6) && check_num(argv))
     {
         init_tdata(&data, argv);
+        init_forks(&data);
+        philos = init_philos(&data);
     }
     else
     {
