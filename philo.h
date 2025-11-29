@@ -14,7 +14,7 @@ typedef struct s_data
 	long			time_eat;
 	long			time_sleep;
 	long			must_eat;
-	pthread_mutex_t *forks;
+	pthread_mutex_t	*forks;
 }t_data;
 
 typedef struct s_philo
