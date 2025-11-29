@@ -15,6 +15,9 @@ typedef struct s_data
 	long			time_sleep;
 	long			must_eat;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t print_lock;  // console yazısı için
+    pthread_mutex_t meal_lock;   // yeme sayısı kontrolü için
+    pthread_mutex_t dead_lock;   // ölüm kontrolü için
 }t_data;
 
 typedef struct s_philo

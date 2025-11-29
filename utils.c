@@ -23,6 +23,9 @@ void    init_forks(t_data *data)
     while (i < data->num_philo)
     {
         pthread_mutex_init(&data->forks[i],NULL);
+        pthread_mutex_init(&data->print_lock,NULL);
+        pthread_mutex_init(&data->meal_lock,NULL);
+        pthread_mutex_init(&data->dead_lock,NULL);
         i++;
     }
 }
