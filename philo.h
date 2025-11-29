@@ -10,10 +10,10 @@
 typedef struct s_data
 {
 	int				num_philo;
-	int				time_die;
-	int				time_eat;
-	int				time_sleep;
-	long			start_time;
+	long			time_die;
+	long			time_eat;
+	long			time_sleep;
+	long			must_eat;
 	pthread_mutex_t *forks;
 }t_data;
 

@@ -22,8 +22,13 @@ int check_num(char **args)
 
 int main(int argc, char *argv[])
 {
-    if (argc == 5 && check_num(argv))
+    t_data data;
+    if ((argc == 5 || argc == 6) && check_num(argv))
     {
-
+        init_tdata(&data, argv);
+    }
+    else
+    {
+        printf("yanlis arg");
     }
 }
