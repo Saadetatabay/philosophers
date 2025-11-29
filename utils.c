@@ -23,11 +23,11 @@ void    init_forks(t_data *data)
     while (i < data->num_philo)
     {
         pthread_mutex_init(&data->forks[i],NULL);
-        pthread_mutex_init(&data->print_lock,NULL);
-        pthread_mutex_init(&data->meal_lock,NULL);
-        pthread_mutex_init(&data->dead_lock,NULL);
         i++;
     }
+	pthread_mutex_init(&data->print_lock,NULL);
+	pthread_mutex_init(&data->meal_lock,NULL);
+	pthread_mutex_init(&data->dead_lock,NULL);
 }
 
 t_philo	*philo_init(t_data *data)
@@ -50,4 +50,22 @@ t_philo	*philo_init(t_data *data)
 		philos[i].right_fork = &data->forks[(i + 1) % data->num_philo];
 	}
 	return	philos;
+}
+
+void	init_thread(t_data *data, t_philo *philos)
+{
+	int	i;
+
+	i = 0;
+	data->start_time = get_current_time();
+	while (i < data->num_philo)
+	{
+		pthread_create(&philos[i].thread, NULL, philo_func, &philos[i]);
+		i++;
+	}
+	i = 0;
+	while (i < data->num_philo)
+	{
+		pthread_join(philos[i].thread, NULL);
+	}
 }
