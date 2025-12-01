@@ -33,3 +33,28 @@ int	check_dead(t_philo	*philo)
 	pthread_mutex_unlock(&philo->data->dead_lock);
 	return 0;
 }
+
+void	take_forks(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data->dead_lock);
+	if (philo->data->dead)
+	{
+		pthread_mutex_unlock(&philo->data->dead_lock);
+		return ;
+	}
+	pthread_mutex_unlock(&philo->data->dead_lock);
+	if (philo->id % 2 == 0)
+	{
+		pthread_mutex_lock(philo->right_fork);
+		my_print("has taken a fork");
+		pthread_mutex_lock(philo->left_fork);
+		my_print("has taken a fork");
+	}
+	else
+	{
+		pthread_mutex_lock(philo->left_fork);
+		my_print("has taken a fork");
+		pthread_mutex_lock(philo->right_fork);
+		my_print("has taken a fork");
+	}
+}
