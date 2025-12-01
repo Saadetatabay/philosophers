@@ -26,7 +26,14 @@ int	ft_atoi(const char *nptr)
 void	my_print(t_philo *philo, char *s)
 {
 	pthread_mutex_lock(&philo->data->print_lock);
-	printf("%d %s",philo->id,s);
+	printf("%d %s \n",philo->id,s);
 	pthread_mutex_unlock(&philo->data->print_lock);
+}
 
+long	get_current_time()
+{
+	struct timeval tv;
+    
+    gettimeofday(&tv, NULL);
+    return (tv.tv_sec * 1000L + tv.tv_usec / 1000L); // milisaniye cinsinden
 }

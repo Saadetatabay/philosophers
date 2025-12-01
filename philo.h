@@ -36,5 +36,16 @@ typedef struct s_philo
 
 void    *philo_func(void *arg);
 void	my_print(t_philo *philo, char *s);
+int	ft_atoi(const char *nptr);
+void    init_tdata(t_data *data, char **arg);
+void    init_forks(t_data *data);
+t_philo	*philo_init(t_data *data);
+void	init_thread(t_data *data, t_philo *philos);
+int	check_dead(t_philo	*philo);
+void	take_forks(t_philo *philo);
+void	eat(t_philo *philo);
+void	put_forks(t_philo *philo);
+void	sleep_philo(t_philo *philo);
+long	get_current_time();
 
 #endif
