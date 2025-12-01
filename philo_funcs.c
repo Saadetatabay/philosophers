@@ -68,3 +68,9 @@ void	eat(t_philo *philo)
 	my_print("is eating");
 	usleep(philo->data->time_eat * 1000);
 }
+
+void	put_forks(t_philo *philo)
+{
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
+}
