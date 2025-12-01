@@ -58,3 +58,13 @@ void	take_forks(t_philo *philo)
 		my_print("has taken a fork");
 	}
 }
+
+void	eat(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data->meal_lock);
+	philo->last_time_eat = get_current_time();
+	philo->eat_count++;
+	pthread_mutex_unlock(&philo->data->meal_lock);
+	my_print("is eating");
+	usleep(philo->data->time_eat * 1000);
+}
