@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
         init_tdata(&data, argv);
         init_forks(&data);
         philos = init_philos(&data);
-        start_thread()
+        start_thread(&data, philos);
     }
     else
     {
