@@ -13,7 +13,7 @@ void    *philo_func(void *arg)
         eat(philo);
         put_forks(philo);
         sleep_philo(philo);
-        think(philo);
+		my_print(philo,"is thinking");
     }
     return NULL;
 }
@@ -46,16 +46,16 @@ void	take_forks(t_philo *philo)
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->right_fork);
-		my_print("has taken a fork");
+		my_print(philo , "has taken a fork");
 		pthread_mutex_lock(philo->left_fork);
-		my_print("has taken a fork");
+		my_print(philo , "has taken a fork");
 	}
 	else
 	{
 		pthread_mutex_lock(philo->left_fork);
-		my_print("has taken a fork");
+		my_print(philo , "has taken a fork");
 		pthread_mutex_lock(philo->right_fork);
-		my_print("has taken a fork");
+		my_print(philo , "has taken a fork");
 	}
 }
 
@@ -65,7 +65,7 @@ void	eat(t_philo *philo)
 	philo->last_time_eat = get_current_time();
 	philo->eat_count++;
 	pthread_mutex_unlock(&philo->data->meal_lock);
-	my_print("is eating");
+	my_print(philo , "is eating");
 	usleep(philo->data->time_eat * 1000);
 }
 
@@ -77,6 +77,6 @@ void	put_forks(t_philo *philo)
 
 void	sleep_filo(t_philo *philo)
 {
-	my_print("is sleeping");
+	my_print(philo , "is sleeping");
 	usleep(philo->data->time_sleep *1000);
 }

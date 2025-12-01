@@ -35,5 +35,6 @@ typedef struct s_philo
 
 
 void    *philo_func(void *arg);
+void	my_print(t_philo *philo, char *s);
 
 #endif
