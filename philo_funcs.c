@@ -74,3 +74,9 @@ void	put_forks(t_philo *philo)
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }
+
+void	sleep_filo(t_philo *philo)
+{
+	my_print("is sleeping");
+	usleep(philo->data->time_sleep *1000);
+}
