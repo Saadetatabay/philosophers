@@ -37,6 +37,7 @@ int	check_dead(t_philo	*philo)
 		philo->data->dead = 1;
 		my_print(philo, "is dead");
 		pthread_mutex_unlock(&philo->data->dead_lock);
+		pthread_mutex_unlock(&philo->data->meal_lock);
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->data->meal_lock);

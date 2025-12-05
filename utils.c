@@ -56,9 +56,11 @@ t_philo	*philo_init(t_data *data)
 
 int	init_thread(t_data *data, t_philo *philos)
 {
-	int	i;
+	pthread_t	monitor_thrd;
+	int			i;
 
 	i = 0;
+	pthread_create(&monitor_thrd, NULL, monitor_func, philos);
 	while (i < data->num_philo)
 	{
 		pthread_create(&philos[i].thread, NULL, philo_func, &philos[i]);
@@ -69,5 +71,6 @@ int	init_thread(t_data *data, t_philo *philos)
 	{
 		pthread_join(philos[i].thread, NULL);
 	}
+	pthread_join(monitor_thrd, NULL);
 	return (0);
 }
