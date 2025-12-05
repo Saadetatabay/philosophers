@@ -47,6 +47,6 @@ void	eat(t_philo *philo);
 void	put_forks(t_philo *philo);
 void	sleep_philo(t_philo *philo);
 long	get_current_time();
-int		ft_usleep(size_t ms)
+int		ft_usleep(size_t ms);
 
 #endif

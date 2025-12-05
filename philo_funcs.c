@@ -4,7 +4,7 @@ void    *philo_func(void *arg)
 {
     t_philo *philo = (t_philo*)arg; //*philo benim gönderdiğim  philomun struct yapıs
     if (philo->id % 2 == 0)
-        usleep(500);
+        ft_usleep(500);
     while(1)
     {
 		pthread_mutex_lock(&philo->data->dead_lock);
@@ -75,7 +75,7 @@ void	eat(t_philo *philo)
 	philo->eat_count++;
 	pthread_mutex_unlock(&philo->data->meal_lock);
 	my_print(philo , "is eating");
-	usleep(philo->data->time_eat * 1000);
+	ft_usleep(philo->data->time_eat);
 }
 
 void	put_forks(t_philo *philo)
@@ -87,5 +87,5 @@ void	put_forks(t_philo *philo)
 void	sleep_philo(t_philo *philo)
 {
 	my_print(philo , "is sleeping");
-	usleep(philo->data->time_sleep *1000);
+	ft_usleep(philo->data->time_sleep);
 }
