@@ -54,7 +54,7 @@ t_philo	*philo_init(t_data *data)
 	return	philos;
 }
 
-void	init_thread(t_data *data, t_philo *philos)
+int	init_thread(t_data *data, t_philo *philos)
 {
 	int	i;
 
@@ -69,4 +69,5 @@ void	init_thread(t_data *data, t_philo *philos)
 	{
 		pthread_join(philos[i].thread, NULL);
 	}
+	return (0);
 }
