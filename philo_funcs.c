@@ -14,8 +14,6 @@ void    *philo_func(void *arg)
 			break;
 		}
 		pthread_mutex_unlock(&philo->data->dead_lock);
-		if (check_dead(philo))
-			break;
         take_forks(philo);
         eat(philo);
         put_forks(philo);

@@ -47,3 +47,37 @@ int	ft_usleep(size_t ms)
 		usleep(10);
 	return (0);
 }
+
+void	*monitor_func(void *arg)
+{
+	long	current_time;
+	int		i;
+	t_philo	*philos;
+	t_data	*my_data;
+
+	philos = (t_philo*)arg;
+	my_data = philos[0].data;
+
+	while (1)
+	{
+		i = 0;
+		while (i < my_data->num_philo)
+		{
+			pthread_mutex_lock(&philos[i].data->meal_lock);
+			current_time = get_current_time();
+			if (current_time - philos[i].last_time_eat > my_data->time_die)
+			{
+				pthread_mutex_lock(&philos[i].data->dead_lock);
+				philos[i].data->dead = 1;
+				my_print(&philos[i], "is dead");
+				pthread_mutex_unlock(&philos[i].data->dead_lock);
+				pthread_mutex_unlock(&philos[i].data->meal_lock);
+				return NULL;
+			}
+			pthread_mutex_unlock(&philos[i].data->meal_lock);
+			i++;
+		}
+		ft_usleep(1);
+	}
+	return NULL;
+}
