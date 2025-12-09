@@ -40,9 +40,9 @@ void	my_print(t_philo *philo, char *s);
 int	ft_atoi(const char *nptr);
 void    init_tdata(t_data *data, char **arg);
 void    init_forks(t_data *data);
-t_philo	*philo_init(t_data *data);
-int	init_thread(t_data *data, t_philo *philos);
-int		check_dead(t_philo	*philo);
+void	philo_init(t_data *data);
+int	init_thread(t_data *data);
+//int		check_dead(t_philo	*philo);
 void	take_forks(t_philo *philo);
 void	eat(t_philo *philo);
 void	put_forks(t_philo *philo);
@@ -51,5 +51,7 @@ long	get_current_time();
 int		ft_usleep(size_t ms);
 void	*monitor_func(void *arg);
 int	all_ate(t_data *data);
+int	over(t_philo *philo);
+
 
 #endif

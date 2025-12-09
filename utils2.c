@@ -25,8 +25,9 @@ int	ft_atoi(const char *nptr)
 
 void	my_print(t_philo *philo, char *s)
 {
+	long	timestamp;
 	pthread_mutex_lock(&philo->data->print_lock);
-	printf("%d %s \n",philo->id,s);
+	printf("%ld %d %s \n", timestamp, philo->id,s);
 	pthread_mutex_unlock(&philo->data->print_lock);
 }
 
@@ -53,12 +54,17 @@ int	all_ate(t_data *data)
 	int	i;
 
 	i = 0;
+	pthread_mutex_lock(&data->meal_lock);
 	while (i < data->num_philo)
 	{
 		if (data->philos[i].eat_count < data->must_eat)
-			return (0);
+		{
+			pthread_mutex_unlock(&data->meal_lock);
+			return 0;
+		}
 		i++;
 	}
+	pthread_mutex_unlock(&data->meal_lock);
 	return (1);
 }
 
@@ -78,31 +84,34 @@ void	*monitor_func(void *arg)
 		//açlıktan öldü mü kontrolü
 		while (i < my_data->num_philo)
 		{
-			pthread_mutex_lock(&philos[i].data->meal_lock);
+			pthread_mutex_lock(&my_data->meal_lock);
 			current_time = get_current_time();
 			if (current_time - philos[i].last_time_eat > my_data->time_die)
 			{
-				pthread_mutex_lock(&philos[i].data->dead_lock);
+				pthread_mutex_lock(&my_data->dead_lock);
     			my_data->dead = 1;       // ölümü kaydet
-				pthread_mutex_unlock(&philos[i].data->dead_lock);
 				my_print(&philos[i],"by monitoring died");     // death log AYNEN 1 kere basılacak
-				printf("[DEBUG] monitor set dead = 1 for philo %d\n", philos[i].id);
-				pthread_mutex_unlock(&philos[i].data->meal_lock);
+				//printf("[DEBUG] monitor set dead = 1 for philo %d\n", philos[i].id);
+				pthread_mutex_unlock(&my_data->dead_lock);
+				pthread_mutex_unlock(&my_data->meal_lock);
 				return NULL;
 			}
-			pthread_mutex_unlock(&philos[i].data->meal_lock);
+			pthread_mutex_unlock(&my_data->meal_lock);
 			i++;
 		}
 		if (my_data->must_eat != -1)
 		{
 			//herkes yemesi gerektiği kadar yedi mi 
-			if (!all_ate(my_data))
+			if (all_ate(my_data))
 			{
-				my_data->dead = 1;
+				pthread_mutex_lock(&my_data->dead_lock);
+        		my_data->dead = 1;
+				my_print(&philos[0], "all philosophers ate the required number of times");
+        		pthread_mutex_unlock(&my_data->dead_lock);
 				break;
 			}
 		}
-		ft_usleep(500);
+		ft_usleep(1);
 	}
 	return NULL;
 }

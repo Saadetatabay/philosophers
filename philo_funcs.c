@@ -4,20 +4,30 @@ void    *philo_func(void *arg)
 {
     t_philo *philo = (t_philo*)arg; //*philo benim gönderdiğim  philomun struct yapıs
     if (philo->id % 2 == 0)
-        ft_usleep(500);
+        ft_usleep(50);
     while(1)
     {
-		pthread_mutex_lock(&philo->data->dead_lock);
-		if(philo->data->dead)
+		if (over(philo))
+			break;
+		
+		// pthread_mutex_lock(&philo->data->dead_lock);
+		// if(philo->data->dead)
+		// {
+		// 	pthread_mutex_unlock(&philo->data->dead_lock);
+		// 	// philo_func, break tatbikinden sonra hemen:
+		// 	break;
+		// }
+		//pthread_mutex_unlock(&philo->data->dead_lock);
+        take_forks(philo);
+		if (over(philo))
 		{
-			pthread_mutex_unlock(&philo->data->dead_lock);
-			// philo_func, break tatbikinden sonra hemen:
+			put_forks(philo);
 			break;
 		}
-		pthread_mutex_unlock(&philo->data->dead_lock);
-        take_forks(philo);
         eat(philo);
-        put_forks(philo);
+		put_forks(philo);
+		if (over(philo))
+			break;
         sleep_philo(philo);
 		my_print(philo,"is thinking");
     }
@@ -25,25 +35,37 @@ void    *philo_func(void *arg)
     return NULL;
 }
 
-int	check_dead(t_philo	*philo)
+int over(t_philo *philo)
 {
-	long	current_time;
-	
-	current_time = get_current_time();
-	pthread_mutex_lock(&philo->data->meal_lock);
-	if (current_time - philo->last_time_eat > philo->data->time_die)
-	{
-		printf("control\n");
-		pthread_mutex_lock(&philo->data->dead_lock);
-		philo->data->dead = 1;
-		my_print(philo, "is dead");
-		pthread_mutex_unlock(&philo->data->dead_lock);
-		pthread_mutex_unlock(&philo->data->meal_lock);
-		return (1);
-	}
-	pthread_mutex_unlock(&philo->data->meal_lock);
-	return 0;
+    pthread_mutex_lock(&philo->data->dead_lock);
+    if (philo->data->dead)
+    {
+        pthread_mutex_unlock(&philo->data->dead_lock);
+        return 1;
+    }
+    pthread_mutex_unlock(&philo->data->dead_lock);
+    return 0;
 }
+
+// int	check_dead(t_philo	*philo)
+// {
+// 	long	current_time;
+	
+// 	current_time = get_current_time();
+// 	pthread_mutex_lock(&philo->data->meal_lock);
+// 	if (current_time - philo->last_time_eat > philo->data->time_die)
+// 	{
+// 		printf("control\n");
+// 		pthread_mutex_lock(&philo->data->dead_lock);
+// 		philo->data->dead = 1;
+// 		my_print(philo, "is dead");
+// 		pthread_mutex_unlock(&philo->data->dead_lock);
+// 		pthread_mutex_unlock(&philo->data->meal_lock);
+// 		return (1);
+// 	}
+// 	pthread_mutex_unlock(&philo->data->meal_lock);
+// 	return 0;
+// }
 
 void	take_forks(t_philo *philo)
 {
