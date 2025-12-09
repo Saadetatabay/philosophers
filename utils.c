@@ -6,7 +6,7 @@ void    init_tdata(t_data *data, char **arg)
     data->time_die = ft_atoi(arg[2]);
     data->time_eat = ft_atoi(arg[3]);
     data->time_sleep = ft_atoi(arg[4]);
-	data->start_time = get_current_time();
+	//data->start_time = get_current_time();
     if (arg[5])
         data->must_eat = ft_atoi(arg[5]);
     else
@@ -60,6 +60,7 @@ int	init_thread(t_data *data, t_philo *philos)
 	int			i;
 
 	i = 0;
+	data->start_time = get_current_time();
 	pthread_create(&monitor_thrd, NULL, monitor_func, philos);
 	while (i < data->num_philo)
 	{

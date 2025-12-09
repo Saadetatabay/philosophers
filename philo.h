@@ -20,6 +20,7 @@ typedef struct s_data
 	pthread_mutex_t print_lock;  // console yazısı için
     pthread_mutex_t meal_lock;   // yeme sayısı kontrolü için
     pthread_mutex_t dead_lock;   // ölüm kontrolü için
+	struct s_philo	*philos;
 }t_data;
 
 typedef struct s_philo
@@ -49,5 +50,6 @@ void	sleep_philo(t_philo *philo);
 long	get_current_time();
 int		ft_usleep(size_t ms);
 void	*monitor_func(void *arg);
+int	all_ate(t_data *data);
 
 #endif

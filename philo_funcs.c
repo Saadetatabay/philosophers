@@ -11,6 +11,7 @@ void    *philo_func(void *arg)
 		if(philo->data->dead)
 		{
 			pthread_mutex_unlock(&philo->data->dead_lock);
+			// philo_func, break tatbikinden sonra hemen:
 			break;
 		}
 		pthread_mutex_unlock(&philo->data->dead_lock);
@@ -20,6 +21,7 @@ void    *philo_func(void *arg)
         sleep_philo(philo);
 		my_print(philo,"is thinking");
     }
+	printf("[DEBUG] philo %d exiting thread (dead=%d)\n", philo->id, philo->data->dead);
     return NULL;
 }
 
@@ -31,6 +33,7 @@ int	check_dead(t_philo	*philo)
 	pthread_mutex_lock(&philo->data->meal_lock);
 	if (current_time - philo->last_time_eat > philo->data->time_die)
 	{
+		printf("control\n");
 		pthread_mutex_lock(&philo->data->dead_lock);
 		philo->data->dead = 1;
 		my_print(philo, "is dead");

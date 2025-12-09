@@ -48,6 +48,20 @@ int	ft_usleep(size_t ms)
 	return (0);
 }
 
+int	all_ate(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->num_philo)
+	{
+		if (data->philos[i].eat_count < data->must_eat)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 void	*monitor_func(void *arg)
 {
 	long	current_time;
@@ -61,6 +75,7 @@ void	*monitor_func(void *arg)
 	while (1)
 	{
 		i = 0;
+		//açlıktan öldü mü kontrolü
 		while (i < my_data->num_philo)
 		{
 			pthread_mutex_lock(&philos[i].data->meal_lock);
@@ -68,16 +83,26 @@ void	*monitor_func(void *arg)
 			if (current_time - philos[i].last_time_eat > my_data->time_die)
 			{
 				pthread_mutex_lock(&philos[i].data->dead_lock);
-				philos[i].data->dead = 1;
-				my_print(&philos[i], "is dead");
+    			my_data->dead = 1;       // ölümü kaydet
 				pthread_mutex_unlock(&philos[i].data->dead_lock);
+				my_print(&philos[i],"by monitoring died");     // death log AYNEN 1 kere basılacak
+				printf("[DEBUG] monitor set dead = 1 for philo %d\n", philos[i].id);
 				pthread_mutex_unlock(&philos[i].data->meal_lock);
 				return NULL;
 			}
 			pthread_mutex_unlock(&philos[i].data->meal_lock);
 			i++;
 		}
-		ft_usleep(1);
+		if (my_data->must_eat != -1)
+		{
+			//herkes yemesi gerektiği kadar yedi mi 
+			if (!all_ate(my_data))
+			{
+				my_data->dead = 1;
+				break;
+			}
+		}
+		ft_usleep(500);
 	}
 	return NULL;
 }
