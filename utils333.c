@@ -28,10 +28,15 @@ void my_print(t_philo *philo, char *s)
     long timestamp;
 
     pthread_mutex_lock(&philo->data->dead_lock);
+    // DÜZELTME: "died" mesajı hariç diğer mesajları bastır
     if (philo->data->dead)
     {
-        pthread_mutex_unlock(&philo->data->dead_lock);
-        return;
+        // Sadece ölüm mesajına izin ver
+        if (s[0] != 'd' || s[1] != 'i' || s[2] != 'e' || s[3] != 'd')
+        {
+            pthread_mutex_unlock(&philo->data->dead_lock);
+            return;
+        }
     }
     pthread_mutex_unlock(&philo->data->dead_lock);
 
@@ -59,69 +64,67 @@ int	ft_usleep(size_t ms)
 	return (0);
 }
 
-int	check_all_ate(t_data *data)
+int	all_ate(t_data *data)
 {
 	int	i;
-	int	all_ate;
 
-	if (data->must_eat == -1)
-		return (0);
-		
-	pthread_mutex_lock(&data->meal_lock);
 	i = 0;
-	all_ate = 1;
+	pthread_mutex_lock(&data->meal_lock);
 	while (i < data->num_philo)
 	{
 		if (data->philos[i].eat_count < data->must_eat)
 		{
-			all_ate = 0;
-			break;
+			pthread_mutex_unlock(&data->meal_lock);
+			return 0;
 		}
 		i++;
 	}
 	pthread_mutex_unlock(&data->meal_lock);
-	return (all_ate);
+	return (1);
 }
 
 void	*monitor_func(void *arg)
 {
 	long	current_time;
 	int		i;
-	t_data *data = (t_data *)arg;
+	t_data *data = (t_data *)arg;  // DÜZELTME: Doğrudan data olarak al
+    t_philo *philos = data->philos;
 
 	while (1)
 	{
 		i = 0;
+		// Açlıktan öldü mü kontrolü
 		while (i < data->num_philo)
 		{
 			pthread_mutex_lock(&data->meal_lock);
 			current_time = get_current_time();
-			if (current_time - data->philos[i].last_time_eat > data->time_die)
+			if (current_time - philos[i].last_time_eat > data->time_die)
 			{
-				pthread_mutex_unlock(&data->meal_lock);
-				
 				pthread_mutex_lock(&data->dead_lock);
     			data->dead = 1;
 				pthread_mutex_unlock(&data->dead_lock);
+				pthread_mutex_unlock(&data->meal_lock);
 				
-				pthread_mutex_lock(&data->print_lock);
-				printf("%ld %d died\n", current_time - data->start_time, data->philos[i].id);
-				pthread_mutex_unlock(&data->print_lock);
+				// Ölüm mesajını kilitsiz yazdır
+				my_print(&philos[i], "died");
 				return NULL;
 			}
 			pthread_mutex_unlock(&data->meal_lock);
 			i++;
 		}
 		
-		if (check_all_ate(data))
+		// Must eat kontrolü
+		if (data->must_eat != -1)
 		{
-			pthread_mutex_lock(&data->dead_lock);
-    		data->dead = 1;
-    		pthread_mutex_unlock(&data->dead_lock);
-			return NULL;
+			if (all_ate(data))
+			{
+				pthread_mutex_lock(&data->dead_lock);
+        		data->dead = 1;
+        		pthread_mutex_unlock(&data->dead_lock);
+				return NULL;
+			}
 		}
-		
-		usleep(1000);
+		usleep(1000);  // CPU kullanımını azaltmak için
 	}
 	return NULL;
 }

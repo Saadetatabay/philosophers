@@ -62,25 +62,23 @@ int	ft_usleep(size_t ms)
 int	check_all_ate(t_data *data)
 {
 	int	i;
-	int	all_ate;
 
 	if (data->must_eat == -1)
 		return (0);
 		
-	pthread_mutex_lock(&data->meal_lock);
 	i = 0;
-	all_ate = 1;
 	while (i < data->num_philo)
 	{
+		pthread_mutex_lock(&data->meal_lock);
 		if (data->philos[i].eat_count < data->must_eat)
 		{
-			all_ate = 0;
-			break;
+			pthread_mutex_unlock(&data->meal_lock);
+			return (0);
 		}
+		pthread_mutex_unlock(&data->meal_lock);
 		i++;
 	}
-	pthread_mutex_unlock(&data->meal_lock);
-	return (all_ate);
+	return (1);
 }
 
 void	*monitor_func(void *arg)

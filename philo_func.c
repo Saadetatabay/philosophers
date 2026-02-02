@@ -16,15 +16,19 @@ void *philo_func(void *arg)
     if (philo->id % 2 == 0)
         usleep(100);
 
-    while (!is_dead(philo))
+    while (1)
     {
+        // Ölüm kontrolü
+        if (is_dead(philo))
+            break;
+        
         // Düşün
         my_print(philo, "is thinking");
         
         // Çatalları al
         take_forks(philo);
         
-        // Kontrol (çatal alırken ölebilir)
+        // Tekrar kontrol (çatal alırken ölebilir)
         if (is_dead(philo))
         {
             put_forks(philo);

@@ -17,9 +17,9 @@ typedef struct s_data
 	long			start_time;
 	int				dead;
 	pthread_mutex_t	*forks;
-	pthread_mutex_t print_lock;
-    pthread_mutex_t meal_lock;
-    pthread_mutex_t dead_lock;
+	pthread_mutex_t print_lock;  // console yazısı için
+    pthread_mutex_t meal_lock;   // yeme sayısı kontrolü için
+    pthread_mutex_t dead_lock;   // ölüm kontrolü için
 	struct s_philo	*philos;
 }t_data;
 
@@ -34,6 +34,7 @@ typedef struct s_philo
 	t_data	*data;
 } t_philo;
 
+
 void    *philo_func(void *arg);
 void	my_print(t_philo *philo, char *s);
 int	ft_atoi(const char *nptr);
@@ -41,13 +42,18 @@ void    init_tdata(t_data *data, char **arg);
 void    init_forks(t_data *data);
 void	philo_init(t_data *data);
 int	init_thread(t_data *data);
-void take_forks(t_philo *philo);
+//int		check_dead(t_philo	*philo);
+void	take_forks(t_philo *philo);
+//int take_forks(t_philo *philo); // void yerine int yapıldı
 void	eat(t_philo *philo);
 void	put_forks(t_philo *philo);
+void	sleep_philo(t_philo *philo);
 long	get_current_time();
 int		ft_usleep(size_t ms);
 void	*monitor_func(void *arg);
-int	check_all_ate(t_data *data);
-int	is_dead(t_philo *philo);
+int	all_ate(t_data *data);
+int	over(t_philo *philo);
+int is_dead(t_philo *philo);
+
 
 #endif

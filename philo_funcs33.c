@@ -4,77 +4,96 @@ void *philo_func(void *arg)
 {
     t_philo *philo = (t_philo*)arg;
     
-    // Tek filozof özel durumu
-    if (philo->data->num_philo == 1)
-    {
-        my_print(philo, "has taken a fork");
-        usleep(philo->data->time_die * 1000);
-        return NULL;
-    }
-    
-    // Çift ID'liler biraz beklesin (deadlock önleme)
+    // Çift ID'li filozoflar biraz beklesin (deadlock önleme)
     if (philo->id % 2 == 0)
-        usleep(100);
+        usleep(1000);
 
-    while (!is_dead(philo))
+    while (!over(philo))
     {
-        // Düşün
-        my_print(philo, "is thinking");
-        
-        // Çatalları al
-        take_forks(philo);
-        
-        // Kontrol (çatal alırken ölebilir)
-        if (is_dead(philo))
-        {
-            put_forks(philo);
+        // Çatal almayı dene
+        if (!take_forks(philo))
             break;
-        }
         
-        // Ye
+        // Yemek ye
         eat(philo);
         
         // Çatalları bırak
         put_forks(philo);
         
-        // Kontrol
-        if (is_dead(philo))
+        // Tekrar kontrol
+        if (over(philo))
             break;
 
         // Uyu
         my_print(philo, "is sleeping");
         ft_usleep(philo->data->time_sleep);
+        
+        if (over(philo))
+            break;
+            
+        // Düşün
+        my_print(philo, "is thinking");
     }
     return NULL;
 }
 
-int is_dead(t_philo *philo)
+int over(t_philo *philo)
 {
-    int dead;
+    int is_dead;
     
     pthread_mutex_lock(&philo->data->dead_lock);
-    dead = philo->data->dead;
+    is_dead = philo->data->dead;
     pthread_mutex_unlock(&philo->data->dead_lock);
     
-    return dead;
+    return is_dead;
 }
 
-void take_forks(t_philo *philo)
+int take_forks(t_philo *philo)
 {
+    // Önce kontrol et
+    if (over(philo))
+        return (0);
+
+    // Deadlock önlemek için çift/tek ID'ye göre farklı sırada kilitle
     if (philo->id % 2 == 0)
     {
         pthread_mutex_lock(philo->right_fork);
+        if (over(philo))
+        {
+            pthread_mutex_unlock(philo->right_fork);
+            return (0);
+        }
         my_print(philo, "has taken a fork");
+        
         pthread_mutex_lock(philo->left_fork);
+        if (over(philo))
+        {
+            pthread_mutex_unlock(philo->left_fork);
+            pthread_mutex_unlock(philo->right_fork);
+            return (0);
+        }
         my_print(philo, "has taken a fork");
     }
     else
     {
         pthread_mutex_lock(philo->left_fork);
+        if (over(philo))
+        {
+            pthread_mutex_unlock(philo->left_fork);
+            return (0);
+        }
         my_print(philo, "has taken a fork");
+        
         pthread_mutex_lock(philo->right_fork);
+        if (over(philo))
+        {
+            pthread_mutex_unlock(philo->right_fork);
+            pthread_mutex_unlock(philo->left_fork);
+            return (0);
+        }
         my_print(philo, "has taken a fork");
     }
+    return (1);
 }
 
 void	eat(t_philo *philo)
