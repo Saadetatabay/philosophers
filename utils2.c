@@ -1,9 +1,9 @@
 #include "philo.h"
 
-int	ft_atoi(const char *nptr)
+long	ft_atoi(const char *nptr)
 {
-	int	sign;
-	int	num;
+	long	sign;
+	long	num;
 
 	num = 0;
 	sign = 1;
@@ -83,45 +83,43 @@ int	check_all_ate(t_data *data)
 	return (all_ate);
 }
 
-void	*monitor_func(void *arg)
+void *monitor_func(void *arg)
 {
-	long	current_time;
-	int		i;
-	t_data *data = (t_data *)arg;
+    t_data *data = (t_data *)arg;
+    long    current_time;
+    int     i;
 
-	while (1)
-	{
-		i = 0;
-		while (i < data->num_philo)
-		{
-			pthread_mutex_lock(&data->meal_lock);
-			current_time = get_current_time();
-			if (current_time - data->philos[i].last_time_eat > data->time_die)
-			{
-				pthread_mutex_unlock(&data->meal_lock);
-				
-				pthread_mutex_lock(&data->dead_lock);
-    			data->dead = 1;
-				pthread_mutex_unlock(&data->dead_lock);
-				
-				pthread_mutex_lock(&data->print_lock);
-				printf("%ld %d died\n", current_time - data->start_time, data->philos[i].id);
-				pthread_mutex_unlock(&data->print_lock);
-				return NULL;
-			}
-			pthread_mutex_unlock(&data->meal_lock);
-			i++;
-		}
-		
-		if (check_all_ate(data))
-		{
-			pthread_mutex_lock(&data->dead_lock);
-    		data->dead = 1;
-    		pthread_mutex_unlock(&data->dead_lock);
-			return NULL;
-		}
-		
-		usleep(1000);
-	}
-	return NULL;
+    while (1)
+    {
+        // Önce hepsi yedi mi kontrol et
+        if (check_all_ate(data))
+        {
+            pthread_mutex_lock(&data->dead_lock);
+            data->dead = 1;
+            pthread_mutex_unlock(&data->dead_lock);
+            return NULL;  // ölüm kontrolü yapmadan çık
+        }
+
+        i = 0;
+        while (i < data->num_philo)
+        {
+            pthread_mutex_lock(&data->meal_lock);
+            current_time = get_current_time();
+            if (current_time - data->philos[i].last_time_eat > data->time_die)
+            {
+                pthread_mutex_unlock(&data->meal_lock);
+                pthread_mutex_lock(&data->dead_lock);
+                data->dead = 1;
+                pthread_mutex_unlock(&data->dead_lock);
+                pthread_mutex_lock(&data->print_lock);
+                printf("%ld %d died\n", current_time - data->start_time, data->philos[i].id);
+                pthread_mutex_unlock(&data->print_lock);
+                return NULL;
+            }
+            pthread_mutex_unlock(&data->meal_lock);
+            i++;
+        }
+        usleep(500);
+    }
+    return NULL;
 }

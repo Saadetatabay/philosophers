@@ -1,5 +1,5 @@
 SRC = main.c utils.c utils2.c philo_funcs.c
-OBJ = $(SRC=.c=.o)
+OBJ = $(SRC:.c=.o)
 NAME = philo
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror

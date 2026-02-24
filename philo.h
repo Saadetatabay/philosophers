@@ -36,7 +36,7 @@ typedef struct s_philo
 
 void    *philo_func(void *arg);
 void	my_print(t_philo *philo, char *s);
-int	ft_atoi(const char *nptr);
+long	ft_atoi(const char *nptr);
 void    init_tdata(t_data *data, char **arg);
 void    init_forks(t_data *data);
 void	philo_init(t_data *data);
@@ -49,5 +49,6 @@ int		ft_usleep(size_t ms);
 void	*monitor_func(void *arg);
 int	check_all_ate(t_data *data);
 int	is_dead(t_philo *philo);
+int	should_stop(t_philo *philo);
 
 #endif
