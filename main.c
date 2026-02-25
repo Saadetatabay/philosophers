@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: satabay <satabay@student.42.fr>            +#+  +:+       +#+        */
+/*   By: satabay <satabay@student.42istanbul.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 20:53:13 by satabay           #+#    #+#             */
-/*   Updated: 2026/02/24 21:21:59 by satabay          ###   ########.fr       */
+/*   Updated: 2026/02/25 12:52:29 by satabay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int	check_num(char **args)
 	while (args[i])
 	{
 		j = 0;
+		if (!args[i][j])
+			return (0);
 		while (args[i][j])
 		{
 			if (!(args[i][j] >= '0' && args[i][j] <= '9'))
@@ -75,4 +77,5 @@ int	main(int argc, char *argv[])
 	{
 		printf("yanlis arg");
 	}
+	return (0);
 }

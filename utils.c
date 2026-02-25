@@ -1,32 +1,44 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: satabay <satabay@student.42istanbul.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/25 13:04:28 by satabay           #+#    #+#             */
+/*   Updated: 2026/02/25 13:04:29 by satabay          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-void    init_tdata(t_data *data, char **arg)
+void	init_tdata(t_data *data, char **arg)
 {
 	data->dead = 0;
 	data->start_time = 0;
-    data->num_philo = ft_atoi(arg[1]);
-    data->time_die = ft_atoi(arg[2]);
-    data->time_eat = ft_atoi(arg[3]);
-    data->time_sleep = ft_atoi(arg[4]);
-    if (arg[5])
-        data->must_eat = ft_atoi(arg[5]);
-    else
-        data->must_eat = -1;
+	data->num_philo = ft_atoi(arg[1]);
+	data->time_die = ft_atoi(arg[2]);
+	data->time_eat = ft_atoi(arg[3]);
+	data->time_sleep = ft_atoi(arg[4]);
+	if (arg[5])
+		data->must_eat = ft_atoi(arg[5]);
+	else
+		data->must_eat = -1;
 }
 
-void    init_forks(t_data *data)
+void	init_forks(t_data *data)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    data->forks = malloc(sizeof(pthread_mutex_t) * data->num_philo);
-    if (!data->forks)
-        return;
-    while (i < data->num_philo)
-    {
-        pthread_mutex_init(&data->forks[i], NULL);
-        i++;
-    }
+	i = 0;
+	data->forks = malloc(sizeof(pthread_mutex_t) * data->num_philo);
+	if (!data->forks)
+		return ;
+	while (i < data->num_philo)
+	{
+		pthread_mutex_init(&data->forks[i], NULL);
+		i++;
+	}
 	pthread_mutex_init(&data->print_lock, NULL);
 	pthread_mutex_init(&data->meal_lock, NULL);
 	pthread_mutex_init(&data->dead_lock, NULL);
@@ -40,8 +52,7 @@ void	philo_init(t_data *data)
 	i = 0;
 	philos = malloc(sizeof(t_philo) * data->num_philo);
 	if (!philos)
-		return;
-	
+		return ;
 	data->philos = philos;
 	while (i < data->num_philo)
 	{
@@ -63,20 +74,18 @@ int	init_thread(t_data *data)
 	data->start_time = get_current_time();
 	i = 0;
 	while (i < data->num_philo)
-    {
-        data->philos[i].last_time_eat = data->start_time;
-        i++;
-    }
-
+	{
+		data->philos[i].last_time_eat = data->start_time;
+		i++;
+	}
 	i = 0;
 	while (i < data->num_philo)
 	{
-		pthread_create(&data->philos[i].thread, NULL, philo_func, &data->philos[i]);
+		pthread_create(&data->philos[i].thread, NULL,
+			philo_func, &data->philos[i]);
 		i++;
 	}
-	
 	pthread_create(&monitor_thrd, NULL, monitor_func, data);
-	
 	i = 0;
 	while (i < data->num_philo)
 	{

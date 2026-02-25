@@ -1,4 +1,4 @@
-SRC = main.c utils.c utils2.c philo_funcs.c
+SRC = main.c utils.c utils2.c philo_funcs.c philo_func.c
 OBJ = $(SRC:.c=.o)
 NAME = philo
 CC = gcc

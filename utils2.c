@@ -119,7 +119,7 @@ void *monitor_func(void *arg)
             pthread_mutex_unlock(&data->meal_lock);
             i++;
         }
-        usleep(500);
+        usleep(1000);
     }
     return NULL;
 }
