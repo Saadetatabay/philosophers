@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: satabay <satabay@student.42istanbul.com    +#+  +:+       +#+        */
+/*   By: satabay <satabay@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 13:04:28 by satabay           #+#    #+#             */
-/*   Updated: 2026/02/25 13:04:29 by satabay          ###   ########.fr       */
+/*   Updated: 2026/02/25 20:27:14 by satabay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,6 @@ int	init_thread(t_data *data)
 	while (i < data->num_philo)
 	{
 		data->philos[i].last_time_eat = data->start_time;
-		i++;
-	}
-	i = 0;
-	while (i < data->num_philo)
-	{
 		pthread_create(&data->philos[i].thread, NULL,
 			philo_func, &data->philos[i]);
 		i++;

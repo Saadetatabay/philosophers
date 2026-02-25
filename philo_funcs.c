@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_funcs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: satabay <satabay@student.42istanbul.com    +#+  +:+       +#+        */
+/*   By: satabay <satabay@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 20:58:41 by satabay           #+#    #+#             */
-/*   Updated: 2026/02/25 13:42:40 by satabay          ###   ########.fr       */
+/*   Updated: 2026/02/25 20:39:12 by satabay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	think(t_philo *philo)
 		if (think_time < 0)
 			think_time = 0;
 		if (think_time > philo->data->time_die / 2)
-    		think_time = philo->data->time_die / 2;
+			think_time = philo->data->time_die / 2;
 		ft_usleep(think_time);
 	}
 }
