@@ -65,7 +65,6 @@ int	check_all_ate(t_data *data)
 
 	if (data->must_eat == -1)
 		return (0);
-
 	pthread_mutex_lock(&data->meal_lock);
 	i = 0;
 	all_ate = 1;
@@ -80,43 +79,4 @@ int	check_all_ate(t_data *data)
 	}
 	pthread_mutex_unlock(&data->meal_lock);
 	return (all_ate);
-}
-
-void	*monitor_func(void *arg)
-{
-	t_data *data = (t_data *)arg;
-	long    current_time;
-	int     i;
-
-    while (1)
-    {
-        if (check_all_ate(data))
-        {
-            pthread_mutex_lock(&data->dead_lock);
-            data->dead = 1;
-            pthread_mutex_unlock(&data->dead_lock);
-            return NULL; 
-        }
-        i = 0;
-        while (i < data->num_philo)
-        {
-            pthread_mutex_lock(&data->meal_lock);
-            current_time = get_current_time();
-            if (current_time - data->philos[i].last_time_eat > data->time_die)
-            {
-                pthread_mutex_unlock(&data->meal_lock);
-                pthread_mutex_lock(&data->dead_lock);
-                data->dead = 1;
-                pthread_mutex_unlock(&data->dead_lock);
-                pthread_mutex_lock(&data->print_lock);
-                printf("%ld %d died\n", current_time - data->start_time, data->philos[i].id);
-                pthread_mutex_unlock(&data->print_lock);
-                return NULL;
-            }
-            pthread_mutex_unlock(&data->meal_lock);
-            i++;
-        }
-        usleep(300);
-    }
-    return NULL;
 }
