@@ -48,13 +48,17 @@ long	get_current_time(void)
 	return (tv.tv_sec * 1000L + tv.tv_usec / 1000L);
 }
 
-int	ft_usleep(size_t ms)
+int	ft_usleep(size_t ms, t_philo *philo)
 {
 	size_t	start;
 
 	start = get_current_time();
 	while ((get_current_time() - start) < ms)
+	{
+		if (should_stop(philo))
+			return (1);
 		usleep(500);
+	}
 	return (0);
 }
 

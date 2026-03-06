@@ -6,7 +6,7 @@
 /*   By: satabay <satabay@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 20:58:41 by satabay           #+#    #+#             */
-/*   Updated: 2026/02/25 20:39:12 by satabay          ###   ########.fr       */
+/*   Updated: 2026/03/06 10:40:34 by satabay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	eat(t_philo *philo)
 	philo->last_time_eat = get_current_time();
 	philo->eat_count++;
 	pthread_mutex_unlock(&philo->data->meal_lock);
-	ft_usleep(philo->data->time_eat);
+	ft_usleep(philo->data->time_eat, philo);
 }
 
 void	put_forks(t_philo *philo)
@@ -88,6 +88,6 @@ void	think(t_philo *philo)
 			think_time = 0;
 		if (think_time > philo->data->time_die / 2)
 			think_time = philo->data->time_die / 2;
-		ft_usleep(think_time);
+		ft_usleep(think_time, philo);
 	}
 }

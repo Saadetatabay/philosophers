@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: satabay <satabay@student.42istanbul.com    +#+  +:+       +#+        */
+/*   By: satabay <satabay@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 12:51:34 by satabay           #+#    #+#             */
-/*   Updated: 2026/02/25 12:51:36 by satabay          ###   ########.fr       */
+/*   Updated: 2026/03/06 10:40:11 by satabay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	take_forks(t_philo *philo);
 void	eat(t_philo *philo);
 void	put_forks(t_philo *philo);
 long	get_current_time(void);
-int		ft_usleep(size_t ms);
+int		ft_usleep(size_t ms, t_philo *philo);
 void	*monitor_func(void *arg);
 int		check_all_ate(t_data *data);
 int		is_dead(t_philo *philo);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_func.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: satabay <satabay@student.42istanbul.com    +#+  +:+       +#+        */
+/*   By: satabay <satabay@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 12:58:26 by satabay           #+#    #+#             */
-/*   Updated: 2026/02/25 12:58:51 by satabay          ###   ########.fr       */
+/*   Updated: 2026/03/06 10:41:20 by satabay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	*philo_func(void *arg)
 	philo = (t_philo *)arg;
 	if (philo->data->num_philo == 1)
 		return (my_print(philo, "has taken a fork"),
-			ft_usleep(philo->data->time_die), NULL);
+			ft_usleep(philo->data->time_die, philo), NULL);
 	if (philo->id % 2 == 0)
-		ft_usleep(philo->data->time_eat / 2);
+		ft_usleep(philo->data->time_eat / 2, philo);
 	while (!should_stop(philo))
 	{
 		think(philo);
@@ -31,7 +31,7 @@ void	*philo_func(void *arg)
 		eat(philo);
 		put_forks(philo);
 		my_print(philo, "is sleeping");
-		ft_usleep(philo->data->time_sleep);
+		ft_usleep(philo->data->time_sleep, philo);
 	}
 	return (NULL);
 }
